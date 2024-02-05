@@ -12,19 +12,30 @@ class BaseModel:
     """
     This is the base class!
     """
-    def __init__(self):
+    def __init__(self, *arg, **kwargs):
         """
         initialises instaces of the base class
         """
         self.id = str(uuid.uuid4())
-        self.create_at = "{:%Y-%m-%dT%H:%M:%S.%f}".format(datetime.now())
-        self.updated_at = self.create_at
+        self.created_at = "{:%Y-%m-%dT%H:%M:%S.%f}".format(datetime.now())
+        self.updated_at = self.created_at
+
+        if kwargs:
+            del kwargs['__class__']
+            created_at = kwargs['created_at']
+            updated_at = kwargs['updated_at']
+            kwargs['created_at'] = datetime.strptime(created_at,
+                                                     "%Y-%m-%dT%H:%M:%S.%f")
+            kwargs['updated_at'] = datetime.strptime(updated_at,
+                                                     "%Y-%m-%dT%H:%M:%S.%f")
+            for key, value in kwargs.items():
+                setattr(self, key, value)
 
     def __str__(self):
         """
         returns a str represenation of class
         """
-        return f"[{self.__class__.__name__}] ({self.id}) <{self.__dict__}>"
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """
