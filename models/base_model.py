@@ -16,10 +16,6 @@ class BaseModel:
         """
         initialises instaces of the base class
         """
-        self.id = str(uuid.uuid4())
-        self.created_at = "{:%Y-%m-%dT%H:%M:%S.%f}".format(datetime.now())
-        self.updated_at = self.created_at
-
         if kwargs:
             del kwargs['__class__']
             created_at = kwargs['created_at']
@@ -30,6 +26,10 @@ class BaseModel:
                                                      "%Y-%m-%dT%H:%M:%S.%f")
             for key, value in kwargs.items():
                 setattr(self, key, value)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now().isoformat()
+            self.updated_at = self.created_at
 
     def __str__(self):
         """
@@ -41,7 +41,7 @@ class BaseModel:
         """
         updates updated_at with current date time
         """
-        self.updated_at = "{:%Y-%m-%dT%H:%M:%S.%f}".format(datetime.now())
+        self.updated_at = datetime.now().isoformat()
 
     def to_dict(self):
         """
