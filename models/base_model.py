@@ -43,7 +43,7 @@ class BaseModel:
         """
         updates updated_at with current date time
         """
-        self.updated_at = datetime.now().isoformat()
+        self.updated_at = datetime.now()
 
     def to_dict(self):
         """
@@ -58,7 +58,5 @@ class BaseModel:
             instance_dict['created_at'] = created_at.isoformat()
 
         if updated_at is not None:
-            instance_dict['updated_at'] = updated_at
-        elif updated_at is not None and updated_at != created_at:
             instance_dict['updated_at'] = updated_at.isoformat()
         return instance_dict
