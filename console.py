@@ -56,6 +56,27 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
+    def do_destroy(self, class_info):
+        """
+        Deletes an instance based on the class name and id and saves the
+        changes to the JSON file
+        """
+        if not class_info:
+            print("** class name missing **")
+        elif len(class_info.split()) < 2:
+            print("** instance id missing **")
+        else:
+            class_name = class_info.split()[0]
+            class_uuid = class_info.split()[1]
+            obj_key = '.'.join([class_name, class_uuid])
+            if (class_name in globals() or
+                    type(globals()[class_name]) is not type):
+                print("** class doesn't exist **")
+            elif models.storage.all().get(obj_key):
+                del models.storage.all()[obj_key]
+            else:
+                print("** no instance found **")
+
     def do_EOF(self, line):
         """Handles the end-of-file marker"""
         return True
