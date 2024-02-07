@@ -77,6 +77,22 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
+    def do_all(self, class_name):
+        """
+        Prints all string representation of all instances based or not on the
+        class name
+        """
+        if not class_name:
+            print(models.storage.all())
+        elif class_name in globals() and type(globals()[class_name]) is type:
+            objs = models.storage.all()
+            print({key: val for key, val in objs.items()
+                  if '__class__' in objs[key]
+                  and objs[key]['__class__'] == class_name})
+        else:
+            print("** class doesn't exist **")
+            
+
     def do_EOF(self, line):
         """Handles the end-of-file marker"""
         return True
