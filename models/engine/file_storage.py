@@ -7,7 +7,6 @@ to a JSON file and deserializing JSON files to instances.
 """
 
 import json
-import importlib
 
 
 class FileStorage:
@@ -44,8 +43,12 @@ class FileStorage:
             json.dump(serialised_objects, f)
 
     def reload(self):
-        from models.base_model import BaseModel
-        from models.user import User
+        from ..base_model import BaseModel
+        from ..user import User
+        from ..state import State
+        from ..city import City
+        from ..amenity import Amenity
+        from ..place import Place
         """
         deserializes the JSON file to __objects
         (only if the JSON file (__file_path) exists ;
@@ -58,8 +61,8 @@ class FileStorage:
 
                 for key, obj in file_contents.items():
                     class_name, obj_id = key.split('.')
-                    cls = eval(class_name)
-                    instance_obj = cls(**obj)
+                    class_instance = eval(class_name)
+                    instance_obj = class_instance(**obj)
                     FileStorage.__objects[key] = instance_obj
         except FileNotFoundError:
             pass
