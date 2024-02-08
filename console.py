@@ -13,6 +13,12 @@ import cmd
 from datetime import datetime
 import models
 from models.base_model import BaseModel
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+from models.user import User
 from models.engine.file_storage import FileStorage
 import shlex
 
@@ -55,8 +61,8 @@ class HBNBCommand(cmd.Cmd):
             if (class_name not in globals() or
                     type(globals()[class_name]) is not type):
                 print("** class doesn't exist **")
-            elif models.storage.all.get(obj_key):
-                print(models.storage.all.get(obj_key))
+            elif models.storage.all().get(obj_key):
+                print(models.storage.all().get(obj_key))
             else:
                 print("** no instance found **")
 
@@ -86,13 +92,21 @@ class HBNBCommand(cmd.Cmd):
         Prints all string representation of all instances based or not on the
         class name
         """
+        objs_list = []
+        all_objs = models.storage.all()
         if not class_name:
-            print(models.storage.all())
+            for key in all_objs.keys():
+                obj = all_objs[key]
+                objs_list.append(str(obj))
+            print(objs_list)        
         elif class_name in globals() and type(globals()[class_name]) is type:
-            objs = models.storage.all()
-            print({key: val for key, val in objs.items()
-                  if '__class__' in objs[key]
-                  and objs[key]['__class__'] == class_name})
+            for key in all_objs.keys():
+                obj_class, obj_id = key.split('.')
+                if obj_class == class_name:
+                    obj = all_objs[key]
+                    objs_list.append(str(obj))
+            print(objs_list)
+
         else:
             print("** class doesn't exist **")
 
