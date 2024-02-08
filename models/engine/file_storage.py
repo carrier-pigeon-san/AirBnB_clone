@@ -2,8 +2,9 @@
 """
 FileStorage Module
 
-This module defines the FileStorage class responsible for serializing instances
-to a JSON file and deserializing JSON files to instances.
+This module defines the FileStorage class responsible for
+serializing instances to a JSON file and deserializing
+JSON files to instances.
 """
 
 import json
@@ -34,7 +35,7 @@ class FileStorage:
         """
          serializes __objects to the JSON file (path: __file_path
         """
-        #__objects is an key: value clasname:instance
+        # __objects is an key: value clasname:instance
         serialised_objects = {}
         for key, obj in FileStorage.__objects.items():
             serialised_objects[key] = obj.to_dict()
@@ -43,20 +44,23 @@ class FileStorage:
             json.dump(serialised_objects, f)
 
     def reload(self):
-        from ..base_model import BaseModel
-        from ..user import User
-        from ..state import State
-        from ..city import City
-        from ..amenity import Amenity
-        from ..place import Place
         """
         deserializes the JSON file to __objects
         (only if the JSON file (__file_path) exists ;
         otherwise, do nothing. If the file doesn’t exist,
         no exception should be raised)
         """
+
+        from ..base_model import BaseModel
+        from ..user import User
+        from ..state import State
+        from ..city import City
+        from ..amenity import Amenity
+        from ..place import Place
+
         try:
-            with open(FileStorage.__file_path, mode='r', encoding='utf-8') as f:
+            with open(FileStorage.__file_path, mode='r', encoding='utf-8')\
+            as f:
                 file_contents = json.load(f)
 
                 for key, obj in file_contents.items():
