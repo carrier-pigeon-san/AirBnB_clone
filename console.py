@@ -79,13 +79,14 @@ class HBNBCommand(cmd.Cmd):
             class_name = class_info.split()[0]
             class_uuid = class_info.split()[1]
             obj_key = '.'.join([class_name, class_uuid])
-            if (class_name in globals() or
+            if (class_name not in globals() or
                     type(globals()[class_name]) is not type):
                 print("** class doesn't exist **")
-            elif models.storage.all().get(obj_key):
-                del models.storage.all()[obj_key]
-            else:
+            elif obj_key not in models.storage.all():
                 print("** no instance found **")
+            else:
+                del models.storage.all()[obj_key]
+                models.storage.save()
 
     def do_all(self, class_name):
         """
