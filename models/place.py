@@ -8,6 +8,12 @@ from .base_model import BaseModel
 
 class Place(BaseModel):
     """
+    Place Class
+
+    Inherited Attributes from BaseModel:
+    - id (str): Unique identifier for the user instance.
+    - created_at (datetime): Date and time when the user instance was created.
+    - updated_at (datetime): Date and time when the user instance was last
     """
     city_id = ''
     user_id = ''
