@@ -99,7 +99,7 @@ class HBNBCommand(cmd.Cmd):
             for key in all_objs.keys():
                 obj = all_objs[key]
                 objs_list.append(str(obj))
-            print(objs_list)        
+            print(objs_list)
         elif class_name in globals() and type(globals()[class_name]) is type:
             for key in all_objs.keys():
                 obj_class, obj_id = key.split('.')
@@ -125,6 +125,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(class_info.split()) < 4:
             print("** value missing **")
         else:
+            all_objs = models.storage.all()
             arg_list = class_info.split()
             class_nm, obj_id, attr_nm = arg_list[0], arg_list[1], arg_list[2]
             attr_val = shlex.split(arg_list[3])[0]
@@ -135,11 +136,10 @@ class HBNBCommand(cmd.Cmd):
             elif not models.storage.all().get(obj_key):
                 print("** no instance found **")
             else:
-                attr_val = type(attr_val)(attr_val)
-                instance = models.storage.all().get(obj_key)
-                instance[attr_nm] = attr_val
-                instance['updated_at'] = str(datetime.now())
-                models.storage.save()
+                for key, val in all_objs.items():
+                    if key == obj_key:
+                        setattr(val, attr_nm, attr_val)
+                        val.save()
 
     def do_EOF(self, line):
         """Handles the end-of-file marker"""
