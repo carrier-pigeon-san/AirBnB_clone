@@ -29,7 +29,6 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(model1.created_at, datetime)
         self.assertIsInstance(model1.updated_at, datetime)
 
-
     def test_base_model_methods(self):
         """
         Test the methods of the BaseModel class.
