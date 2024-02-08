@@ -8,6 +8,7 @@ from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 import os
 
+
 class TestFileStorage(unittest.TestCase):
     def setUp(self):
         """
@@ -65,6 +66,7 @@ class TestFileStorage(unittest.TestCase):
         for key in result:
             self.assertTrue(key.startswith(expected_key))
             self.assertIsInstance(result[key], BaseModel)
+
 
 if __name__ == '__main__':
     unittest.main()
