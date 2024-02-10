@@ -16,10 +16,19 @@ the following capabilities:
 - Destroying an object
 
 ### Starting the command interpreter
-_more to come..._
+Run the Command Interpreter
+./console.py
 
 ### Using the command interpreter
-_more to come..._
+Creating a new user:
+create User email="user@example.com" password="securepassword"
 
 ### Examples
-_more to come..._
+Retrieving details of a place:
+show Place 124
+
+Updating the name of a place:
+update Place 5678 name "New Place Name"
+
+Deleting a user:
+destroy User 1234
