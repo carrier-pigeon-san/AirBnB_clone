@@ -60,7 +60,7 @@ class FileStorage:
 
         try:
             with open(FileStorage.__file_path, mode='r', encoding='utf-8')\
-            as f:
+                 as f:
                 file_contents = json.load(f)
 
                 for key, obj in file_contents.items():
