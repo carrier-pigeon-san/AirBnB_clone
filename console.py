@@ -178,7 +178,6 @@ class HBNBCommand(cmd.Cmd):
                     args = args[1][0].split(',', 1)
                     _id = args[0].replace('"', '')
                     other_args = args[1].replace('"', '')
-                    print(other_args)
                     return f"{command} {_class} {_id} {other_args}"
                 else:
                     _id = args[1][0].replace('"', '')
