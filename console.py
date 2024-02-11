@@ -162,15 +162,41 @@ class HBNBCommand(cmd.Cmd):
             _class = args[0]
             args = args[1].split('(', 1)
             command = args[0]
-            if len(args) == 2:
+            if ',' not in args[1] and not args[1].strip():
                 args = args[1].split(')', 1)
                 if len(args) == 2:
-                    _id = args[0]
-                    other_arguments = args[1]
-            line = command + " " + _class + " " + _id + " " + other_arguments
-            return line
+                    _id = args[0].split(',', 1)
+                    if (len(_id) == 2):
+                        other_args = _id[1]
+                        other_args = other_args.replace(',', '')
+                        line = f"{command} {_class} {_id[0]} {other_args}"
+                        line = line.replace('"', '')
+                        return line
+            else:
+                args[1] = args[1].split(')')
+                if ',' in args[1][0]:
+                    args = args[1][0].split(',', 1)
+                    _id = args[0].replace('"', '')
+                    other_args = args[1].replace('"', '')
+                    print(other_args)
+                    return f"{command} {_class} {_id} {other_args}"
+                else:
+                    _id = args[1][0].replace('"', '')
+                    return f"{command} {_class} {_id}"
         else:
             return argument
+
+    def do_count(self, class_name):
+        """
+        counts number of objects for a given class
+        """
+        obj_list = models.storage.all()
+        count = 0
+        for key, value in obj_list.items():
+            cls_name = key.split('.')[0]
+            if cls_name == class_name:
+                count += 1
+        print(count)
 
 
 if __name__ == '__main__':
