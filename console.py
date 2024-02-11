@@ -125,21 +125,32 @@ class HBNBCommand(cmd.Cmd):
         elif len(class_info.split()) < 4:
             print("** value missing **")
         else:
-            all_objs = models.storage.all()
             arg_list = class_info.split()
             class_nm, obj_id, attr_nm = arg_list[0], arg_list[1], arg_list[2]
             attr_val = shlex.split(arg_list[3])[0]
             obj_key = '.'.join([class_nm, obj_id])
+            all_objs = models.storage.all()
+
             if (class_nm not in globals() or
                     type(globals()[class_nm]) is not type):
                 print("** class doesn't exist**")
             elif not models.storage.all().get(obj_key):
                 print("** no instance found **")
             else:
-                for key, val in all_objs.items():
-                    if key == obj_key:
-                        setattr(val, attr_nm, attr_val)
-                        val.save()
+                if '{' in class_info:
+                    i = class_info.index('{')
+                    update = class_info[i:]
+                    update = eval(update)
+                    for key, obj in all_objs.items():
+                        if key == obj_key:
+                            for key, val in update.items():
+                                setattr(obj, key, val)
+                        obj.save()
+                else:
+                    for key, obj in all_objs.items():
+                        if key == obj_key:
+                            setattr(obj, attr_nm, attr_val)
+                        obj.save()
 
     def do_EOF(self, line):
         """Handles the end-of-file marker"""
@@ -162,7 +173,7 @@ class HBNBCommand(cmd.Cmd):
             _class = args[0]
             args = args[1].split('(', 1)
             command = args[0]
-            if ',' not in args[1] and not args[1].strip():
+            if ',' in args[1] and args[1].strip() and '{' not in args[1]:
                 args = args[1].split(')', 1)
                 if len(args) == 2:
                     _id = args[0].split(',', 1)
@@ -177,7 +188,7 @@ class HBNBCommand(cmd.Cmd):
                 if ',' in args[1][0]:
                     args = args[1][0].split(',', 1)
                     _id = args[0].replace('"', '')
-                    other_args = args[1].replace('"', '')
+                    other_args = eval(args[1])
                     return f"{command} {_class} {_id} {other_args}"
                 else:
                     _id = args[1][0].replace('"', '')
